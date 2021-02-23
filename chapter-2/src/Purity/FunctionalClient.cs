@@ -17,24 +17,16 @@ namespace Purity
         {
             var inputOrder = JsonConvert.DeserializeObject<Order>(System.IO.File.ReadAllText(jsonName));
 
-            var controller = new FunctionalOrderController(_db);
-
             var order = inputOrder.Items.Aggregate(
                 inputOrder.Id.StartOrder(),
                 (current, item) => current.AddItem(item));
 
             var conflicts = order.Conflicts;
-            if (conflicts > 10)
-                ;
-            else if (conflicts > 0)
-            {
-                WarnUser();
-                controller.FinalizeOrder(order);
-            }
-            else
-            {
-                controller.FinalizeOrder(order);
-            }
+            if (conflicts > 10) return;
+            if (conflicts > 0) WarnUser();
+
+            var controller = new FunctionalOrderController(_db);
+            controller.FinalizeOrder(order);
         }
 
         private void WarnUser()
