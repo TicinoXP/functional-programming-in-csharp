@@ -9,8 +9,8 @@ namespace Purity
         public string Status { get; set; }
         public List<Product> Items { get; set; }
 
-        internal Order Clone() =>
-            new Order {Id = Id, Status = Status, Items = new List<Product>()};
+        internal Order WithItems(List<Product> items) =>
+            new Order {Id = Id, Status = Status, Items = items};
 
         public int Conflicts => Items.Count(x => x.Status == "Overwritten");
     }
