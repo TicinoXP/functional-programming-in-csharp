@@ -11,10 +11,10 @@ namespace Purity
         internal static Order AddItem(this Order order, Product product) =>
             order.WithItems(
                 order.Items.Select(item => 
-                        item.Name == product.Name
-                            ? item.WithStatus("Overwritten")
-                            : item.Clone())
-                    .Union(new List<Product> {product})
-                    .ToList());
+                    item.Name == product.Name
+                        ? item.WithStatus("Overwritten")
+                        : item.Clone())
+                .Union(new List<Product> {product})
+                .ToList());
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Purity
@@ -17,10 +18,10 @@ namespace Purity
             var inputOrder = JsonConvert.DeserializeObject<Order>(System.IO.File.ReadAllText(jsonName));
 
             var controller = new FunctionalOrderController(_db);
-            var order = inputOrder.Id.StartOrder();
 
-            foreach (var item in inputOrder.Items)
-                order = order.AddItem(item);
+            var order = inputOrder.Items.Aggregate(
+                inputOrder.Id.StartOrder(),
+                (current, item) => current.AddItem(item));
 
             var conflicts = order.Conflicts;
             if (conflicts > 10)
