@@ -17,10 +17,10 @@ namespace Purity
             var inputOrder = JsonConvert.DeserializeObject<Order>(System.IO.File.ReadAllText(jsonName));
 
             var controller = new FunctionalOrderController(_db);
-            var order = controller.StartOrder(inputOrder.Id);
+            var order = inputOrder.Id.StartOrder();
 
             foreach (var item in inputOrder.Items)
-                order = controller.AddItemToOrder(order, item);
+                order = order.AddItem(item);
 
             var conflicts = order.Conflicts;
             if (conflicts > 10)

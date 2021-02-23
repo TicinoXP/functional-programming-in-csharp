@@ -53,18 +53,6 @@ namespace Purity
             }
         }
 
-        internal Order StartOrder(int id) => 
-            new Order {Id = id, Items = new List<Product>()};
-
-        internal Order AddItemToOrder(Order order, Product product) =>
-            order.WithItems(
-                order.Items.Select(item => 
-                    item.Name == product.Name
-                        ? item.WithStatus("Overwritten")
-                        : item.Clone())
-                .Union(new List<Product> {product})
-                .ToList());
-
         public void FinalizeOrder(Order order)
         {
             if (GetOrder(order.Id) != null)
