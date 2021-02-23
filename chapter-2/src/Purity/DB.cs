@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Purity
 {
@@ -6,20 +7,33 @@ namespace Purity
     {
         public int Id { get; set; }
         public string Status { get; set; }
-
-        public int Conflicts { get; set; }
-
         public List<Product> Items { get; set; }
+
+        internal Order Clone() =>
+            new Order {Id = Id, Status = Status, Items = new List<Product>()};
+
+        public int Conflicts => Items.Count(x => x.Status == "Overwritten");
     }
 
     internal class Product
     {
         public string Name { get; set; }
         public string Status { get; set; }
+
+        public Product WithStatus(string status) =>
+            new Product {Name = Name, Status = status};
+
+        public Product Clone() =>
+            new Product {Name = Name, Status = Status};
     }
 
     internal static class DB
     {
         internal static List<Order> Orders { get; set; } = new List<Order>();
+    }
+
+    internal class FunctionalDB
+    {
+        internal List<Order> Orders { get; set; } = new List<Order>();
     }
 }
