@@ -4,9 +4,9 @@ namespace Purity
 {
     internal class Client
     {
-        internal void PlaceOrder()
+        internal void PlaceOrder(string jsonName)
         {
-            var order = JsonConvert.DeserializeObject<Order>(System.IO.File.ReadAllText("order.json"));
+            var order = JsonConvert.DeserializeObject<Order>(System.IO.File.ReadAllText(jsonName));
 
             var controller = new OrderController();
             controller.StartOrder(order.Id);
@@ -21,7 +21,7 @@ namespace Purity
 
             if (conflicts > 10)
                 controller.RollBackOrder();
-            if (conflicts > 0)
+            else if (conflicts > 0)
             {
                 WarnUser();
                 controller.FinalizeOrder();
